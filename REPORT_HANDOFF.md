@@ -60,7 +60,7 @@ explicitly permitted):
   **35 epochs**, Adam, cosine LR schedule, batch size 32, best checkpoint
   selected by validation Q (converged smoothly — val Q 0.526 at epoch 1 to
   0.770 by epoch 35, per `train_log_2.csv`; see `training_curves_v3.png`).
-- Weights exported as fp16 (`weights_v3.pt`).
+- Weights exported as fp16 (`weights.pt`), the canonical final checkpoint.
 
 ## 3. Timing / hardware
 
@@ -74,7 +74,7 @@ explicitly permitted):
 
 ## 4. Model size
 
-- **S_disk = 148,255 bytes (≈0.141 MiB)**, from `os.path.getsize(weights_v3.pt)`.
+- **S_disk = 148,255 bytes (≈0.141 MiB)**, from `os.path.getsize(weights.pt)`.
 - Well under the 4 MiB cap — size penalty in CES is negligible either way.
 
 ## 5. Results table (put this directly in the report)
@@ -173,32 +173,25 @@ when you look at it.
 
 ## 9. Deliverables checklist
 
-- [x] `captured/original/`, `captured/images_256/`, `captured/masks_256/`
-- [x] `captured/overlays/*_overlay.png` (6 images, v3)
-- [x] Codebase: `model.py`, `dataset.py`, `metrics.py`, `evaluate.py`,
-      `time_official.py`, `prepare_captured.py`, `draw_mask.py`,
-      `make_overlays.py` / `generate_overlays_v3.py`, `compute_ces.py`
-- [x] `predict_v3.py` + `weights_v3.pt` — **this is the final submission
-      pair**; v2's `predict_1.py` / `weights_1.pt` and v1's `predict.py` /
-      `weights.pt` are superseded and should be clearly marked or removed
-      from the submission to avoid ambiguity about which is final.
-- [x] Kaggle training notebook: `CES_TrackB_Kaggle_training_v3.ipynb`
-- [x] `submission_metrics_v3.json`, `train_log_2.csv`, `training_curves_v3.png`
-      — raw numbers backing every figure in this doc.
-- [ ] **Report** — the only thing left. Sections needed: method (§1),
-      training setup incl. split sizes and CPU model (§2–3), results table +
-      CES (§5), the v2→v3 experiment writeup (§6) — this is strong material
-      for the report since it's a genuine, specific finding — generalization
-      gap (§7), the 6 overlay figures, and 2 failure cases (§8).
+- [x] captured/original/, captured/images_256/, captured/masks_256/
+- [x] captured/overlays/*_overlay.png (6 images, V3)
+- [x] Final codebase: model.py, dataset.py, metrics.py, evaluate_v3_submission.py,
+      time_official.py, prepare_captured.py, draw_mask.py,
+      generate_overlays_v3.py, compute_ces.py
+- [x] predict.py + weights.pt — canonical final V3 inference pair (base_ch=16).
+      Superseded variants are retained under archive/ and are not used by submission/.
+- [x] Kaggle training notebook: CES_TrackB_Kaggle_training_v3.ipynb
+- [x] submission_metrics_v3.json, train_log_2.csv, training_curves_v3.png
+- [ ] Final report PDF review — report.pdf is present, but the user may still be making
+      final edits. Refresh submission/report.pdf and rebuild submission.zip afterward.
 
-## 10. Before you submit — cleanup flagged
+## 10. Cleanup status
 
-The repo currently has several same-purpose files from different stages
-(`predict.py`, `predict_1.py`, `predict_v3.py`; `weights.pt`,
-`weights_1.pt`, `weights_v3.pt`, `weights_old_v1.pt`; two `compute_ces`
-files; `time_official.py` and `time_official_1.py`) plus a number of loose
-root-level images (`mask*.png`, `photo*.jpg`, `download.jpg`) and
-exploratory scripts (`check_failure.py`, `check_masks.py`, `check_photos.py`,
-`try1.ipynb`) not referenced anywhere in this handoff. Worth a pass to
-remove or archive anything that isn't part of the final submission before
-zipping/pushing, so the grader isn't left guessing which `predict.py` is real.
+The root-level V3 predictor and checkpoint are canonical. Superseded model, evaluation,
+training, and exploratory files are retained under archive/. The former root overlays/
+directory was verified byte-identical to captured/overlays/ and moved into the archive.
+Unorganized scratch photos and masks were also moved out of the project root.
+
+The submission/ directory is a local packaging copy and is excluded from Git to avoid
+committing a second copy of the code, checkpoint, report, and captured images.
+submission.zip is also a generated local artifact. Refresh both after the final report edit.

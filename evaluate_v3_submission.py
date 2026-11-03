@@ -13,7 +13,7 @@ import torch.nn.functional as F
 cv2.setNumThreads(1)
 torch.set_num_threads(1)
 
-from predict_v3 import FastSegUNet, load_weights_fp16, segment_photo_in_memory
+from predict import FastSegUNet, load_weights_fp16, segment_photo_in_memory
 from dataset import list_duts_pairs, split_train_val
 from metrics import ConfusionAccumulator, batch_bf1
 
@@ -99,7 +99,7 @@ def evaluate_pairs(model, pairs, batch_size=32, track_timing=False):
 
 
 def main():
-    weights_path = "weights_v3.pt"
+    weights_path = "weights.pt"
     s_disk_bytes = os.path.getsize(weights_path)
     print(f"Weights file: {weights_path} ({s_disk_bytes} bytes, {s_disk_bytes/1024:.2f} KiB)")
 
@@ -206,4 +206,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

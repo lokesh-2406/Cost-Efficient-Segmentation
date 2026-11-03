@@ -1,5 +1,5 @@
 {
-  "weights_file": "weights_v3.pt",
+  "weights_file": "weights.pt",
   "s_disk_bytes": 148255,
   "validation": {
     "n": 1055,

@@ -6,7 +6,7 @@ CES = Q * (1 - 0.20*(T_CPU/50) - 0.10*min(1, S_disk/4MiB))
 If T_CPU > 50 ms, CES = 0.
 
 Usage:
-  python compute_ces.py --q_duts_te 0.7870 --t_cpu_ms 25.0 --s_disk_bytes 249631
+  python compute_ces.py --q_duts_te 0.6107 --t_cpu_ms 25.0 --s_disk_bytes 148255
 
 Or pass no args and it will prompt you.
 """
@@ -25,11 +25,11 @@ def compute_ces(q_score: float, t_cpu_ms: float, s_disk_bytes: int) -> float:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--q_duts_te", type=float, default=None,
-                    help="Q score on DUTS-TE (from evaluate.py output)")
+                    help="Q score on DUTS-TE (from evaluate_v3_submission.py output)")
     ap.add_argument("--t_cpu_ms", type=float, default=None,
-                    help="Average T_CPU in ms (from time_official_1.py output)")
-    ap.add_argument("--s_disk_bytes", type=int, default=249631,
-                    help="Size of weights file in bytes (default: 249631 for weights_1.pt)")
+                    help="Average T_CPU in ms (from time_official.py output)")
+    ap.add_argument("--s_disk_bytes", type=int, default=148255,
+                    help="Size of weights file in bytes (default: 148255 for weights.pt)")
     args = ap.parse_args()
 
     q = args.q_duts_te
@@ -38,7 +38,7 @@ def main():
     if q is None:
         q = float(input("Enter Q score on DUTS-TE: "))
     if t is None:
-        t = float(input("Enter T_CPU_ms (from time_official_1.py): "))
+        t = float(input("Enter T_CPU_ms (from time_official.py): "))
 
     s = args.s_disk_bytes
 
@@ -59,4 +59,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

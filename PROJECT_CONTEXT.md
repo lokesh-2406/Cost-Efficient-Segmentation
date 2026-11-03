@@ -26,7 +26,7 @@ Track B: Cost-Efficient Segmentation under a Compute Budget (CSL7360 Assignment 
   - Decoder: Bilinear upsampling with skip concatenations and depthwise separable blocks (dec4, dec3, dec2, dec1).
   - Refinement: Single depthwise-separable refinement block at full 256 x 256 resolution before the 1x1 conv segmentation head.
   - Optimization: Input normalization (`x / 255.0`) folded directly into `forward()`, optimized via `torch.jit.trace` and `torch.jit.freeze`.
-  - Precision: FP16 state dictionary (`weights.pt` / `weights_v3.pt`), stored via `torch.save`.
+  - Precision: FP16 state dictionary (`weights.pt`), stored via `torch.save`.
   - Disk size: **148,255 bytes** (~144.8 KiB, 0.035 of 4 MiB, size penalty: 0.00353).
 
 ## Official Submission Results
@@ -48,9 +48,14 @@ Track B: Cost-Efficient Segmentation under a Compute Budget (CSL7360 Assignment 
 1. **`photo8` (potted plant)**: Severe false negatives on the thin, bare twigs/branches against the mottled wall background. The multi-stage strided pooling causes thin linear structures (width < 2 px at 256x256) to vanish in the bottleneck representation, and adjacent background foliage/wall stains triggered false positives.
 2. **`photo7` (water tap)**: Mineral/water stain on the wall beneath the tap shared chromatic and intensity characteristics with the shadowed underside of the white/blue tap body, causing the segmentation mask to leak into the vertical background stain.
 
+## Final submission naming
+- Canonical predictor/checkpoint: `predict.py` + `weights.pt`.
+- `predict_v3.py` and `weights_v3.pt` were verified byte-identical to the canonical pair and archived as duplicate copies.
+- Official timing uses the exact inference helper from `predict.py`, `base_ch=16`, TorchScript trace/freeze, and two warm-up passes.
+
 ## Deliverables Generated
 - `predict.py`: Configured and verified with `python predict.py --image ... --out ...` (prints `T_CPU_ms` and `S_disk_bytes`).
-- `weights.pt`: Updated to v3 weights (148,255 bytes).
+- `weights.pt`: Canonical V3 checkpoint (148,255 bytes); byte-identical to the archived `weights_v3.pt` duplicate.
 - `training_curves_v3.png`: Generated from `train_log_2.csv` (35 epochs).
 - `captured/overlays/`: Side-by-side Ground Truth (green) vs Predicted (red) overlays generated for all captured photos.
 - `submission_metrics_v3.json`: Machine-readable results and individual breakdown.

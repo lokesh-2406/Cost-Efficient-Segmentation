@@ -76,7 +76,7 @@ python evaluate_v3_submission.py
 To measure single-threaded CPU execution over all 5,019 test images:
 
 ```bash
-python time_official.py --duts_te_img DUTS-TE/DUTS-TE/DUTS-TE-Image --weights weights.pt
+python time_official.py --duts_te_img DUTS-TE/DUTS-TE/DUTS-TE-Image --weights weights.pt --base_ch 16
 ```
 
 ### Generate Overlays for Captured Photos

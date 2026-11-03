@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import torch
 
-from predict_v3 import FastSegUNet, load_weights_fp16, segment_photo_in_memory
+from predict import FastSegUNet, load_weights_fp16, segment_photo_in_memory
 
 
 def overlay(img_bgr, mask_01, color_bgr, alpha=0.45):
@@ -23,7 +23,7 @@ def label(img, text):
 
 
 def main():
-    weights_path = "weights_v3.pt"
+    weights_path = "weights.pt"
     images_dir = "captured/images_256"
     masks_dir = "captured/masks_256"
     out_dirs = ["overlays", "captured/overlays"]
@@ -75,4 +75,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
