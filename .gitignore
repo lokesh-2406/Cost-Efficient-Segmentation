@@ -218,3 +218,30 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ==============================================================================
+# Cost-Efficient Segmentation ignores
+# ==============================================================================
+# Large Datasets and Archives (do NOT commit or push to remote)
+DUTS-TR/
+DUTS-TE/
+DUTS-TR.zip
+DUTS-TE.zip
+*.zip
+.kaggle-outputs/
+
+# Root scratch images/masks (official assets are organized in captured/)
+/photo*.jpg
+/photo*.png
+/mask*.png
+/download.jpg
+
+# Temporary & intermediate experiment files
+/weights_old*.pt
+/weights_1.pt
+/train_log (1).csv
+/compute_ces (1).py
+/time_official_1.py
+/predict_1.py
+/try1.ipynb
+/CES_TrackB_Kaggle_training_FIXED.ipynb
