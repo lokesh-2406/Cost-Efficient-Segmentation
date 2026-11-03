@@ -41,7 +41,7 @@ class DSConvBlock(nn.Module):
 
 
 class FastSegUNet(nn.Module):
-    def __init__(self, base_ch=24):
+    def __init__(self, base_ch=16):
         super().__init__()
         c1, c2, c3, c4, c5 = base_ch, base_ch * 2, base_ch * 3, base_ch * 4, base_ch * 6
         self.stem = nn.Sequential(
@@ -61,6 +61,7 @@ class FastSegUNet(nn.Module):
         self.head = nn.Conv2d(c1, 1, kernel_size=1, stride=1, padding=0)
 
     def forward(self, x):
+        x = x / 255.0
         s1 = self.stem(x)
         s2 = self.enc2(s1)
         s3 = self.enc3(s2)
@@ -82,7 +83,7 @@ class FastSegUNet(nn.Module):
 @torch.no_grad()
 def segment_photo_in_memory(model, img_256_bgr):
     img_rgb = cv2.cvtColor(img_256_bgr, cv2.COLOR_BGR2RGB)
-    x = torch.from_numpy(img_rgb).permute(2, 0, 1).unsqueeze(0).float().mul_(1.0 / 255.0)
+    x = torch.from_numpy(img_rgb).permute(2, 0, 1).unsqueeze(0).float()
     logits = model(x)
     return (logits[0, 0] > 0.0).to(torch.uint8).numpy()
 
@@ -100,7 +101,7 @@ def main():
     parser.add_argument("--image", type=str, required=True)
     parser.add_argument("--out", type=str, required=True)
     parser.add_argument("--weights", type=str, default="weights.pt")
-    parser.add_argument("--base_ch", type=int, default=24)
+    parser.add_argument("--base_ch", type=int, default=16)
     args = parser.parse_args()
 
     s_disk_bytes = os.path.getsize(args.weights)
@@ -109,6 +110,7 @@ def main():
     load_weights_fp16(model, args.weights, device="cpu")
     dummy = torch.zeros(1, 3, 256, 256, dtype=torch.float32)
     traced_model = torch.jit.trace(model, dummy)
+    traced_model = torch.jit.freeze(traced_model)
     traced_model.eval()
 
     img_bgr = cv2.imread(args.image, cv2.IMREAD_COLOR)
@@ -117,6 +119,7 @@ def main():
     img_256 = resize_photo_256(img_bgr)
 
     mask_01 = segment_photo_in_memory(traced_model, img_256)  # first run: warm-up + output
+    mask_01 = segment_photo_in_memory(traced_model, img_256)  # second warm-up (freeze benefits from one more)
     cv2.imwrite(args.out, (mask_01 * 255).astype(np.uint8))
 
     num_runs = 20
