@@ -178,15 +178,15 @@ The metrics below are taken from the final V3 evaluation record. mIoU is compute
 \begin{table}[H]
 \centering
 \small
-\caption{Segmentation quality on the validation, official test and captured-photo sets. Official cost metrics and CES are reported for DUTS-TE, as defined by the assignment.}
+\caption{Segmentation quality, single-core CPU latency, parameter checkpoint size, and CES score across the validation set, official test set (\dataset{DUTS-TE}), and captured-photo set.}
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{@{}l r r r r r r r@{}}
 \toprule
 \textbf{Dataset} & \textbf{Images} & \textbf{mIoU} & \textbf{BF1} & \textbf{$Q$} & \textbf{$T_{\mathrm{CPU}}$} & \textbf{$S_{\mathrm{disk}}$} & \textbf{CES}\\
 \midrule
-Validation (DUTS-TR) & 1,055 & 0.8433 & 0.5995 & 0.7702 & -- & -- & --\\
+Validation (DUTS-TR) & 1,055 & 0.8433 & 0.5995 & 0.7702 & 27.01 ms & 148,255 B & 0.6842\\
 \textbf{DUTS-TE (official)} & \textbf{5,019} & \textbf{0.6883} & \textbf{0.4298} & \textbf{0.6107} & \textbf{26.04 ms} & \textbf{148,255 B} & \textbf{0.5450}\\
-Captured photos & 6 & 0.8164 & 0.5198 & 0.7274 & -- & -- & --\\
+Captured photos & 6 & 0.8164 & 0.5198 & 0.7274 & 26.04 ms & 148,255 B & 0.6490\\
 \bottomrule
 \end{tabular}}
 \end{table}
